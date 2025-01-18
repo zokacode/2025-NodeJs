@@ -1,7 +1,7 @@
 let express = require('express');
 let app = express();
-
-let port = process.env.PORT || 3000;
+let user = require('./routes/user');
+const port = process.env.PORT || 3000;
 
 console.log('Server is starting...');
 
@@ -10,11 +10,11 @@ app.use(express.static('public'));
 // 增加json解析
 app.use(express.json());
 
-// 使用Middleware，進行通用的處理
-app.use((req, _res, next) => {
-	console.log('Middleware 1 ');
-    console.log(req.get('Referer'));
-	next();
+// Middleware，通用的處理
+app.use(function (req, _res, next) {
+    console.log("Middleware url: " + req.url);
+    // console.log(req.get('Referer'));
+    next();
 });
 
 // 首頁
@@ -26,18 +26,33 @@ app.get('/', (_req, res) => {
     `);
 });
 
-app.get('/json', (req, res) => {
-    res.json({ message: 'Hello World!' });
+app.get('/today', function (req, res) {
+    let now = new Date();
+    let today = req.query.today;
+    let str = `${now.toISOString().split('T')[0]} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+    res.status(200)
+        .type('text/plain')
+        .send(str + "\r\n" + "Date: " + today); 
 });
 
-app.use((req, _res, next) => {
+app.get('/json', function (_req, res) {
+    res.status(200)
+        .type('application/json')
+        .send(JSON.stringify({
+            "status": 200,
+            "message": 'hello world',
+        }));
+});
+
+app.use((_req, _res, next) => {
 	console.log('假如有登入機制');
 	next();
 });
-// 引入其他router
-app.use('/user', require('./routers/user'));
 
-// 404處理
+// 引入其他route
+app.use('/user', user);
+
+// 設定無路由時 404
 app.use((req, res, _next) => {
     const referer = req.get('Referer') || '/';
     res.status(404).send(`
@@ -61,7 +76,7 @@ app.use((err, _req, res, _next) => {
     `);
 });
 
-app.listen(port, () => {
+app.listen(port, function () {
     console.log('Server is starting...' + process.env.NODE_ENV);
     console.log(`Server is running at port ${port}`);
 });

@@ -1,7 +1,7 @@
 let express = require('express');
 let router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', (_req, res) => {
     res.status(200).send(`<h1>Hello User</h1><br/><a href="/">home</a>`);
 });
 
