@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  </head>
+  <body>
+    <div class="flex">
+      <h1 class="text-3xl font-bold me-2">Hello <%= name %></h1>
+      <a href="javascript:history.back()" class="w-20 text-center bg-gray-300 hover:bg-gray-700 !text-gray-700 hover:!text-white visited:!text-gray-700 p-2.5 text-xs leading-5 rounded-md no-underline">
+        回上一頁</a>
+    </div>
+
+    <form action="<%= editUrl %>" method="post" class="w-50">
+      <div class="my-2 grid grid-cols-3">
+        <label for="name" class="col-span-1 block text-base font-medium leading-6 text-gray-900">名字</label>
+        <input type="text" class="col-span-2 px-2 bg-white border border-slate-300 rounded-md text-base shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" name="name" value="<%= name %>" />
+      </div>
+      <div class="my-2 grid grid-cols-2 gap-2">
+        <input type="reset" class="bg-gray-500 hover:bg-gray-700 px-5 py-2.5 text-base leading-5 rounded-md font-semibold text-white" value="重置" />
+        <input type="submit" class="bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-base leading-5 rounded-md font-semibold text-white" value="送出" />
+      </div>
+    </form>
+  </body>
+</html>
