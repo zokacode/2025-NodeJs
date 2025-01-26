@@ -13,12 +13,18 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+//  Log  request
 app.use(logger('dev'));
+// 增加json解析
 app.use(express.json());
+// 解析 application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
+// 讀取 Cookie
 app.use(cookieParser());
+// 增加檔案路徑
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 引入其他路由管理
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
